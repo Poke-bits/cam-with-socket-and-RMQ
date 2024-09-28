@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viewer</title>
+</head>
+<body>
+  <h1>Viewing Webcam Stream</h1>
+  <video id="remoteVideo" autoplay playsinline></video>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const remoteVideo = document.getElementById('remoteVideo');
+
+   
+    socket.on('view-video', (data) => {
+      console.log("Dados recebidos do servidor:", data); 
+      const videoBlob = new Blob([data], { type: 'video/webm' });
+      const videoUrl = URL.createObjectURL(videoBlob);
+      remoteVideo.src = videoUrl;
+    });
+  </script>
+</body>
+</html>

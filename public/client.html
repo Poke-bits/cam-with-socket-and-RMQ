@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Stream</title>
+</head>
+
+<body>
+    <h1>Streaming Webcam</h1>
+    <video id="localVideo" autoplay playsinline></video>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+
+        async function startCapture() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const videoElement = document.getElementById('localVideo');
+                videoElement.srcObject = stream;
+
+                const mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+
+                        socket.emit('video-data', event.data);
+                    }
+                };
+
+                mediaRecorder.start(100);
+            } catch (error) {
+                console.error('Erro ao capturar a webcam:', error);
+            }
+        }
+
+
+        startCapture();
+    </script>
+</body>
+
+</html>
