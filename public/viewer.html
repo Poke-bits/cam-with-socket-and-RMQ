@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Viewer</title>
+  <style>
+    video {
+      width: 100%;
+      height: auto; 
+    }
+  </style>
 </head>
 <body>
   <h1>Viewing Webcam Stream</h1>
@@ -11,15 +17,21 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = io();
+    const socket = io(); 
     const remoteVideo = document.getElementById('remoteVideo');
 
-   
     socket.on('view-video', (data) => {
       console.log("Dados recebidos do servidor:", data); 
-      const videoBlob = new Blob([data], { type: 'video/webm' });
-      const videoUrl = URL.createObjectURL(videoBlob);
-      remoteVideo.src = videoUrl;
+
+     
+      const byteCharacters = atob(data);
+      const byteNumbers = new Uint8Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i); 
+      }
+      const videoBlob = new Blob([byteNumbers], { type: 'video/webm' }); 
+      const videoUrl = URL.createObjectURL(videoBlob); 
+      remoteVideo.src = videoUrl; 
     });
   </script>
 </body>

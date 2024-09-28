@@ -20,9 +20,9 @@ io.on('connection', (socket) => {
     socket.on('video-data', (data) => {
         try {
             sendAVideoToQueue(data);
-            console.log("Pacote de vídeo enviado para a fila.");
+            // console.log("Pacote de vídeo enviado para a fila.");
         } catch (error) {
-            console.error("Erro ao enviar pacote de vídeo:", error);
+            // console.error("Erro ao enviar pacote de vídeo:", error);
         }
     });
 
