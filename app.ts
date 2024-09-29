@@ -3,8 +3,8 @@ import express from 'express';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import util from 'util';
-import sendAVideoToQueue from './rabbitMQ/videoSender';
-import consumeAVideoQueue from './rabbitMQ/videoReceiver';
+import sendVideoToQueue from './rabbitMQ/videoSender';
+import consumeVideoQueue from './rabbitMQ/videoReceiver';
 
 const app = express();
 const server = createServer(app);
@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
 
     socket.on('video-data', (data) => {
         try {
-            sendAVideoToQueue(data);
+            sendVideoToQueue(data);
             // console.log("Pacote de vídeo enviado para a fila.");
         } catch (error) {
             // console.error("Erro ao enviar pacote de vídeo:", error);
@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     });
 });
 
-consumeAVideoQueue(io);
+consumeVideoQueue(io);
 
 
 server.listen(port, () => {

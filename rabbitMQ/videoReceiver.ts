@@ -1,18 +1,19 @@
-import { amqp, rabbitMQUrl, queue } from './rabbitMQConfig';
+import { amqp, rabbitMQUrl, queueName } from './rabbitMQConfig';
 
-async function consumeAVideoQueue(io: any) {
+async function consumeVideoQueue(io: any) {
     try {
         const connection = await amqp.connect(rabbitMQUrl, { timeout: 5000 });
         const channel = await connection.createChannel();
-        await channel.assertQueue(queue, { durable: false });
+        await channel.assertQueue(queueName, { durable: false });
 
 
 
-        channel.consume(queue, (msg) => {
+        channel.consume(queueName, (msg) => {
             if (msg !== null) {
-                const videoBuffer = msg.content; 
-                io.emit('view-video', videoBuffer.toString('base64')); 
+                const videoBuffer = msg.content;
+                io.emit('view-video', videoBuffer);
                 channel.ack(msg);
+
             }
         });
     } catch (error) {
@@ -20,4 +21,4 @@ async function consumeAVideoQueue(io: any) {
     }
 }
 
-export default consumeAVideoQueue;
+export default consumeVideoQueue;

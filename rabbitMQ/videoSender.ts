@@ -1,13 +1,13 @@
 
-import { amqp, rabbitMQUrl, queue } from './rabbitMQConfig';
+import { amqp, rabbitMQUrl, queueName } from './rabbitMQConfig';
 
-async function sendAVideoToQueue(data: any) {
+async function sendVideoToQueue(data: any) {
     try {
         const connection = await amqp.connect(rabbitMQUrl, { setTimeout: 5000 });
         const channel = await connection.createChannel();
-        await channel.assertQueue(queue, { durable: false });
+        await channel.assertQueue(queueName, { durable: false });
 
-        channel.sendToQueue(queue, Buffer.from(data));
+        channel.sendToQueue(queueName, Buffer.from(data));
         // console.log("Pacotão de vídeo enviado para RabbitMQ");
 
         setTimeout(() => {
@@ -18,4 +18,4 @@ async function sendAVideoToQueue(data: any) {
     }
 }
 
-export default sendAVideoToQueue;
+export default sendVideoToQueue;
