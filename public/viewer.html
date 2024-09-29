@@ -29,12 +29,12 @@
     let isSourceBufferReady = false;
 
     mediaSource.addEventListener('sourceopen', () => {
-      sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs=vp8'); // Ajustar codec conforme seu stream
-      isSourceBufferReady = true; // Marca que o SourceBuffer está pronto
+      sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs=vp8'); 
+      isSourceBufferReady = true;
 
       socket.on('view-video', (data) => {
         if (isSourceBufferReady) {
-          const arrayBuffer = new Uint8Array(data).buffer; // Converter para ArrayBuffer
+          const arrayBuffer = new Uint8Array(data).buffer; 
           try {
             sourceBuffer.appendBuffer(arrayBuffer);
           } catch (error) {
@@ -47,7 +47,7 @@
     });
 
     mediaSource.addEventListener('sourceclose', () => {
-      isSourceBufferReady = false; // Marca que o SourceBuffer não está mais disponível
+      isSourceBufferReady = false;
     });
   </script>
 </body>

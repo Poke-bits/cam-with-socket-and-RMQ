@@ -5,9 +5,6 @@ async function consumeVideoQueue(io: any) {
         const connection = await amqp.connect(rabbitMQUrl, { timeout: 5000 });
         const channel = await connection.createChannel();
         await channel.assertQueue(queueName, { durable: false });
-
-
-
         channel.consume(queueName, (msg) => {
             if (msg !== null) {
                 const videoBuffer = msg.content;
